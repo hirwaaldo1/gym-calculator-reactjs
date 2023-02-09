@@ -14,7 +14,6 @@ export default function App() {
   const findResult = () => {
     switch (operator) {
       case "+":
-        console.log(Number(prev), Number(result));
         setResult(Number(prev) + Number(result));
         break;
       case "-":
@@ -103,7 +102,7 @@ export default function App() {
                 onClick={() => {
                   if ((i + 1) % 4 === 0) {
                     setOperator(item);
-                    setPrev(result);
+                    setPrev(Number(prev) + Number(result));
                     setResult("");
                     setIsDot(false);
                   } else {
