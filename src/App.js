@@ -4,6 +4,7 @@ export default function App() {
   const [operator, setOperator] = React.useState("");
   const [prev, setPrev] = React.useState("0");
   const [isDot, setIsDot] = React.useState(false);
+  const [isOperator, setIsOperator] = React.useState(0);
   function removeZero(str) {
     return str.toString().charAt(0) === "0" &&
       str.toString().length > 1 &&
@@ -11,35 +12,43 @@ export default function App() {
       ? str.toString().slice(1)
       : str.toString();
   }
-  const findResult = () => {
+  const findResult = (setResults) => {
+    let findAnswer = 0;
     switch (operator) {
       case "+":
-        setResult(Number(prev) + Number(result));
+        findAnswer = Number(prev) + Number(result);
+        setResults(findAnswer);
         break;
       case "-":
-        setResult(Number(prev) - Number(result));
+        findAnswer = Number(prev) - Number(result);
+        setResults(findAnswer);
         break;
       case "x":
-        setResult(Number(prev) * Number(result));
+        findAnswer = Number(prev) * Number(result);
+        setResults(findAnswer);
         break;
       case "/":
-        setResult(Number(prev) / Number(result));
+        findAnswer = Number(prev) / Number(result);
+        setResults(findAnswer);
         break;
       case "%":
-        setResult(Number(prev) % Number(result));
+        findAnswer = Number(prev) % Number(result);
+        setResults(findAnswer);
         break;
       default:
         break;
     }
     setPrev("0");
     setOperator("");
+    setIsOperator(0);
     setIsDot(false);
+    return findAnswer;
   };
   return (
     <div className="flex justify-center items-center font-bold text-2xl">
       <div className="bg-[#dbdbdb] min-w-[25%]">
         <div className="w-full p-2 flex justify-end bg-[#7a7b88] text-6xl font-medium text-white">
-          {prev !== "0" && removeZero(prev)} {operator !== "" && operator}{" "}
+          {/* {prev !== "0" && removeZero(prev)} */}
           {removeZero(result)}
         </div>
         <div className="grid grid-cols-4">
@@ -65,8 +74,9 @@ export default function App() {
             className="border flex justify-center items-center py-8 cursor-pointer"
             onClick={() => {
               setOperator("%");
+              setIsOperator(isOperator + 1);
               setPrev(result);
-              setResult("");
+              setResult("0");
             }}
           >
             %
@@ -75,8 +85,9 @@ export default function App() {
             className="border flex justify-center items-center py-8 cursor-pointer"
             onClick={() => {
               setOperator("/");
+              setIsOperator(isOperator + 1);
               setPrev(result);
-              setResult("");
+              setResult("0");
             }}
           >
             /
@@ -101,9 +112,18 @@ export default function App() {
               <div
                 onClick={() => {
                   if ((i + 1) % 4 === 0) {
+                    if (isOperator > 0) {
+                      findResult(setResult);
+                      setOperator("");
+                      setPrev(findResult(setResult));
+                      setResult("0");
+                    } else {
+                      setResult("0");
+                      setPrev(result);
+                      setOperator(item);
+                      setIsOperator(isOperator + 1);
+                    }
                     setOperator(item);
-                    setPrev(Number(prev) + Number(result));
-                    setResult("");
                     setIsDot(false);
                   } else {
                     if (item === "." && !isDot) {
@@ -123,7 +143,7 @@ export default function App() {
           })}
           <div
             className="bg-green-900 text-4xl w-full flex justify-center items-center col-span-2"
-            onClick={findResult}
+            onClick={() => findResult(setResult)}
           >
             =
           </div>
