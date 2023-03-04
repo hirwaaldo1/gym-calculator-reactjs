@@ -1,17 +1,17 @@
-import React from "react";
-export default function App() {
-  const [result, setResult] = React.useState("0");
-  const [operator, setOperator] = React.useState("");
-  const [prev, setPrev] = React.useState("0");
-  const [isDot, setIsDot] = React.useState(false);
-  const [isOperator, setIsOperator] = React.useState(0);
-  function removeZero(str) {
+import React, { useState } from "react";
+const App = () => {
+  const [result, setResult] = useState("0");
+  const [operator, setOperator] = useState("");
+  const [prev, setPrev] = useState("0");
+  const [isDot, setIsDot] = useState(false);
+  const [isOperator, setIsOperator] = useState(0);
+  const removeZero = (str) => {
     return str.toString().charAt(0) === "0" &&
       str.toString().length > 1 &&
       str.toString().charAt(1) !== "."
       ? str.toString().slice(1)
       : str.toString();
-  }
+  };
   const findResult = (setResults) => {
     let findAnswer = 0;
     switch (operator) {
@@ -48,15 +48,12 @@ export default function App() {
     <div className="flex justify-center items-center font-bold text-2xl">
       <div className="bg-[#dbdbdb] min-w-[25%]">
         <div className="w-full p-2 flex justify-end bg-[#7a7b88] text-6xl font-medium text-white">
-          {/* {prev !== "0" && removeZero(prev)} */}
           {removeZero(result)}
         </div>
         <div className="grid grid-cols-4">
           <div
             className="border flex justify-center items-center py-8"
-            onClick={() => {
-              setResult("0");
-            }}
+            onClick={() => setResult("0")}
           >
             AC
           </div>
@@ -151,4 +148,5 @@ export default function App() {
       </div>
     </div>
   );
-}
+};
+export default App;
